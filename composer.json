@@ -1,0 +1,43 @@
+{
+    "name": "amber/model",
+    "description": "Simple PHP active record model.",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Deivi Peña",
+            "email": "systemson@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Amber\\Model\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.1.0",
+        "amber/common": "dev-master",
+        "amber/collection": "dev-master",
+        "amber/cache": "dev-master"
+    },
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "^2.0",
+        "phpunit/phpunit": "^6.5|^7.0",
+        "squizlabs/php_codesniffer": "^3.3",
+        "lavoiesl/php-benchmark": "^1.4"
+    },
+    "scripts": {
+        "test": "phpunit --verbose --coverage-html ./tmp/coverage/",
+        "docs": "phpdoc -d ./src -i Tests/ -t ./tmp/docs/api",
+        "sniff": "phpcs --standard=PSR12 ./src",
+        "fix-cs": "phpcbf --standard=PSR12 ./src",
+        "speed": "php ./tests/Benchmark.php"
+    }
+}
