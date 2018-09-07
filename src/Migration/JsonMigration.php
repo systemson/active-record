@@ -2,14 +2,10 @@
 
 namespace Amber\Model\Migration;
 
-use Amber\Model\Base\Migration\MigrationClass;
-use Amber\Cache\CacheAware\CacheAwareInterface;
-use Amber\Cache\CacheAware\CacheAwareTrait;
+use Amber\Model\Base\Essentials;
 
-class JsonMigration extends MigrationClass implements CacheAwareInterface
+class JsonMigration extends Essentials
 {
-    use CacheAwareTrait;
-
     protected $data;
 
     public function createDB(string $name = null): bool
@@ -48,7 +44,7 @@ class JsonMigration extends MigrationClass implements CacheAwareInterface
         if ($this->dbExists()) {
             $this->data = $this->getCache()->get($this->database);
 
-            unset($this->data[$name])
+            unset($this->data[$name]);
 
             return $this->getCache()->set($this->database, $this->data);
         }

@@ -2,18 +2,10 @@
 
 namespace Amber\Model\Base\Migration;
 
+use Amber\Model\Base\Driver\DriverInterface;
+
 trait MigrationTrait
 {
-    protected $database;
-
-    protected $table;
-
-    protected $columns = [];
-
-    protected $primarykey;
-
-    protected $foreingkeys = [];
-
     protected $driver;
 
     public function getDriver(): DriverInterface
@@ -26,28 +18,28 @@ trait MigrationTrait
         return $this->driver;
     }
 
-    public function setDriver(string $driver)
+    public function setDriver($driver)
     {
         return $this->setConfig(['default_driver' => $driver]);
     }
 
-    protected function getTable(string $table = null)
+    public function createTable($model): bool
     {
-        return $table ?? $this->table;
+        return $this->getDriver()->createTable($model);
     }
 
-    public function create($name, $callable)
+    public function hasTable($model): bool
     {
-        $this->getDriver()->createTable($name, $callable);
+        return $this->getDriver()->hasTable($model);
     }
 
-    public function update($name, $callable)
+    public function updateTable($model): bool
     {
-        $this->getDriver()->createTable($name, $callable);
+        return $this->getDriver()->updateTable($model);
     }
 
-    public function drop($name)
+    public function dropTable($model): bool
     {
-        $this->getDriver()->dropTable($name);
+        return $this->getDriver()->dropTable($model);
     }
 }

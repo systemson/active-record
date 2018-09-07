@@ -9,6 +9,6 @@ interface ConfigAwareInterface extends BaseConfig
     const DEFAULT_DRIVER = 'json';
 
     const DRIVERS = [
-        'json' => Amber\Model\Drivers\JsonDriver::class,
+        'json' => \Amber\Model\Drivers\JsonDriver::class,
     ];
 }

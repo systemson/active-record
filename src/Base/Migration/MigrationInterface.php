@@ -4,9 +4,11 @@ namespace Amber\Model\Base\Migration;
 
 interface MigrationInterface
 {
-    public function create(string $table = null): bool;
+    public function createTable($model): bool;
 
-    public function update(string $table = null): bool;
+    public function hasTable($model): bool;
 
-    public function drop(string $table = null): bool;
+    public function updateTable($model): bool;
+
+    public function dropTable($model): bool;
 }

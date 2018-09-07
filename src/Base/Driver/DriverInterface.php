@@ -2,11 +2,12 @@
 
 namespace Amber\Model\Base\Driver;
 
+use Amber\Model\Base\Migration\MigrationInterface;
 use Ds\Collection;
 
-interface DriverInterface
+interface DriverInterface extends MigrationInterface
 {
-    public static function find(integer $id): Collection;
+    /*public static function find(integer $id): Collection;
 
     public static function select(...$columns): DriverInterface;
 
@@ -34,5 +35,5 @@ interface DriverInterface
 
     public static function toJson(): string;
 
-    public function store(): bool;
+    public function store(): bool;*/
 }
