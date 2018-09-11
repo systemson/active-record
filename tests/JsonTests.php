@@ -14,13 +14,28 @@ class JsonTest extends TestCase
         $migrator = new MigrationHandler();
         $model = new User();
 
+        $config = [
+            'database_driver' => 'json',
+            'database' => [
+                'cache_folder' => 'tmp\database\\',
+            ],
+        ];
+
         $migrator->setDriver('json');
+
+        $this->assertFalse($migrator->createDB($model));
 
         $this->assertFalse($migrator->hasTable($model));
 
         $this->assertTrue($migrator->createTable($model));
 
         $this->assertTrue($migrator->hasTable($model));
+
+        $this->assertTrue($migrator->createOrReplaceTable($model));
+
+        $this->assertTrue($migrator->dropTable($model));
+
+        $this->assertTrue($migrator->dropDB($model));
     }
 
     /**

@@ -11,9 +11,8 @@ class User extends ActiveRecord
 	protected $primarykey = 'id';
 
 	protected $columns = [
-		'id' 			=> 'autoincrement',
-		'user' 			=> 'varchar(20)',
-		'password'	 	=> 'varchar(250)',
+		'user' 			=> 'string(20)',
+		'password'	 	=> 'string(250)',
 		'created_at' 	=> 'date',
 		'edited_at' 	=> 'date',
 	];

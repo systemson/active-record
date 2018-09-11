@@ -2,6 +2,9 @@
 
 namespace Amber\Model;
 
-class ActiveRecord
+use Amber\Model\Base\Model\ModelClass;
+
+class ActiveRecord extends ModelClass
 {
+    
 }

@@ -2,13 +2,19 @@
 
 namespace Amber\Model\Base\Migration;
 
+use Amber\Model\Base\Model\ModelInterface;
+
 interface MigrationInterface
 {
-    public function createTable($model): bool;
+    /*public function createDB(string $name): bool;
 
-    public function hasTable($model): bool;
+    public function dropDB(string $name): bool;
 
-    public function updateTable($model): bool;
+    public function createTable(ModelInterface $model): bool;
 
-    public function dropTable($model): bool;
+    public function hasTable(ModelInterface $model): bool;
+
+    public function updateTable(ModelInterface $model): bool;
+
+    public function dropTable(ModelInterface $model): bool;*/
 }

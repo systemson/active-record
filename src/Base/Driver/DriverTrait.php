@@ -9,4 +9,14 @@ trait DriverTrait
     protected $columns;
 
     protected $connection;
+
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    public function setConnection($config)
+    {
+        $this->connection = $config;
+    }
 }
