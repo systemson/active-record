@@ -17,9 +17,11 @@ class User extends ActiveRecord
 		'edited_at' 	=> 'date',
 	];
 
-	protected $attributes;
+	protected $properties;
 
 	protected $original;
+
+	protected $timestamps = true;
 
 	/*----------------------------------------------------------*/
 	/*------------MUST BE MOVED TO A BASE CLASS-----------------*/
@@ -32,5 +34,25 @@ class User extends ActiveRecord
 	public function isValid(): bool
 	{
 		return true;
+	}
+
+	public function __set($name, $value)
+	{
+		$this->properties[$name] = $value;
+	}
+
+	public function __get($name)
+	{
+		return $this->properties[$name];
+	}
+
+	public function toArray()
+	{
+		return $this->properties;
+	}
+
+	public function toJson()
+	{
+		return json_encode($this->properties);
 	}
 }

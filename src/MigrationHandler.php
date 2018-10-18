@@ -11,8 +11,8 @@ class MigrationHandler extends MigrationClass
         $this->setConfig($config);
     }
 
-    public function __call($method, $args)
+    public function __call($method, $args = [])
     {
-    	call_user_func_array([$this->getDriver(), $method], $args);
+    	return call_user_func_array([$this->getDriver(), $method], $args);
     }
 }

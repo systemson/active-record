@@ -15,26 +15,24 @@ class ArrayTest extends TestCase
             'default_driver' => 'array',
         ];
 
-        $migrator = new MigrationHandler($config);
+        $engine = new MigrationHandler($config);
         $model = new User();
 
-        $this->assertTrue($migrator->createDB('array_database'));
+        $this->assertTrue($engine->createDB('array_database'));
 
-        //$this->assertFalse($migrator->hasTable($model));
+        $this->assertFalse($engine->hasTable($model));
 
-        $this->assertTrue($migrator->createTable($model));
+        $this->assertTrue($engine->createTable($model));
 
-        //$this->assertTrue($migrator->hasTable($model));
+        $this->assertTrue($engine->hasTable($model));
 
-        //$this->assertTrue($migrator->createOrReplaceTable($model));
-
-        var_dump($migrator->collection);
+        return $engine;
     }
 
     /**
-     * @depends testJsonMigration
+     * @depends testCreateDB
      */
-    public function testJsonInsert()
+    public function testInsert($engine)
     {
         $user = new User();
 
@@ -43,13 +41,13 @@ class ArrayTest extends TestCase
 
         $this->assertTrue($user->isValid());
 
-        $this->assertTrue($user->save());
+        $this->assertTrue($engine->save($user));
     }
 
     /**
-     * @depends testJsonMigration
+     * @depends testCreateDB
      */
-    public function testJsonSelect()
+    public function testSelect()
     {
         $user = User::last();
 
@@ -59,7 +57,7 @@ class ArrayTest extends TestCase
     }
 
     /**
-     * @depends testJsonMigration
+     * @depends testCreateDB
      */
     public function testJsonUpdate()
     {

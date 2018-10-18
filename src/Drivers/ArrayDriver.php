@@ -36,12 +36,16 @@ class ArrayDriver extends Essentials implements DriverInterface
         return true;
     }
 
-    public function updateTable(ModelInterface $model): bool
+    public function hasTable(ModelInterface $model): bool
     {
-        //
+        $db_name = $model->getConnection()->db_name;
+        $table = $model->getTable();
+        $columns = $model->getColumns();
+
+        return isset($this->collection['databases'][$db_name][$table]) && isset($this->collection['tables'][$db_name . '@' . $table]);
     }
 
-    public function hasTable(ModelInterface $model): bool
+    public function updateTable(ModelInterface $model): bool
     {
         //
     }
@@ -52,6 +56,16 @@ class ArrayDriver extends Essentials implements DriverInterface
         $table = $model->getTable();
         unset($this->collection['database'][$db_name][$table]);
         unset($this->collection['tables'][$db_name . '@' . $table]);
+
+        return true;
+    }
+
+    public function save(ModelInterface $model): bool
+    {
+        $db_name = $model->getConnection()->db_name;
+        $table = $model->getTable();
+
+        $this->collection['database'][$db_name][$table][] = $model->toArray();
 
         return true;
     }
