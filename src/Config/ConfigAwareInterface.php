@@ -6,10 +6,12 @@ use Amber\Config\ConfigAwareInterface as BaseConfig;
 
 interface ConfigAwareInterface extends BaseConfig
 {
-    const DEFAULT_DRIVER = 'json';
+    const PACKAGE_NAME = 'active_record';
+
+    const DEFAULT_DRIVER = 'mysql';
 
     const DRIVERS = [
-        'array' => \Amber\Model\Drivers\ArrayDriver::class,
-        'json' => \Amber\Model\Drivers\JsonDriver::class,
+        //'array' => \Amber\Model\Drivers\ArrayDriver::class,
+        //'json' => \Amber\Model\Drivers\JsonDriver::class,
     ];
 }
