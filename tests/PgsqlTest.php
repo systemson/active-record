@@ -5,6 +5,7 @@ namespace Tests;
 use PHPUnit\Framework\TestCase;
 use Amber\Model\Drivers\DB;
 use Amber\Model\Drivers\Model;
+use Amber\Model\Drivers\Database;
 use Amber\Config\Config;
 use Amber\Model\Config\ConfigAwareInterface;
 use PDO;
@@ -18,36 +19,44 @@ class PgsqlTest extends TestCase
                 'driver' => 'pgsql',
                 'host' => 'localhost',
                 'port' => '5432',
-                'dbname' => 'systemson-erp',
-                'user' => 'deivi',
-                'password' => 'deivi',
+                //'dbname' => 'systemson-erp',
+                'user' => 'postgres',
+                'password' => 'postgres',
             ],
         ];
 
         Config::set('active_record', $config);
     }
 
-    public function testConnector()
+    public function testDatabase()
     {
-        $result = DB::query(
-            'SELECT * FROM db.clientes WHERE codigo = :where_codigo',
-            [':where_codigo' => 1]
-        );
+        $dbname = 'amber';
 
-        /*var_dump(
-            $result[0]->codigo,
-            $result[0]->get('codigo'),
-            $result[0]['codigo'],
-            $result[0]->codigo = '2'
-        );*/
+        $db = new Database($dbname);
+
+        //$this->assertFalse($db->exists());
+
+        //$db->create();
+
+        //$this->assertTrue($db->exists());
+
+        $db->drop();
+
+        //$this->assertFalse($db->exists());
+        
     }
 
-    public function testModel()
+    /*public function testConnector()
+    {
+
+    }*/
+
+    /*public function testModel()
     {
         //$model = new Model();
 
         $model = Model::where('codigo', '=', 1);
 
         var_dump($model->get());
-    }
+    }*/
 }

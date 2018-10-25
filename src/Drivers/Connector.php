@@ -11,11 +11,9 @@ use Amber\Model\Config\ConfigAwareTrait;
 use Amber\Utils\Implementations\AbstractSingleton;
 use Amber\Utils\Traits\SingletonTrait;
 
-class DB implements ConfigAwareInterface
+class Connector implements ConfigAwareInterface
 {
     use ConfigAwareTrait, SingletonTrait;
-
-    private $pdo;
 
     private function getDriver()
     {
@@ -24,27 +22,27 @@ class DB implements ConfigAwareInterface
 
     private function getHost()
     {
-        return $this->getConfig('host');
+        return $this->getConfig('database.host');
     }
 
     private function getPort()
     {
-        return $this->getConfig('port');
+        return $this->getConfig('database.port');
     }
 
     private function getDbname()
     {
-        return $this->getConfig('dbname');
+        return $this->getConfig('database.dbname');
     }
 
     private function getUser()
     {
-        return $this->getConfig('user');
+        return $this->getConfig('database.user');
     }
 
     private function getPassword()
     {
-        return $this->getConfig('password');
+        return $this->getConfig('database.password');
     }
 
     private function credentials(): string
@@ -61,14 +59,14 @@ class DB implements ConfigAwareInterface
         return $this->getDriver() . ':' . implode(';', $credentials);
     }
 
-    private function connect(): PDO
+    private function pdo(): PDO
     {
         return new PDO($this->credentials());
     }
 
     private function query(string $statement, iterable $args = []): Collection
     {
-    	$query = $this->connect()->prepare($statement);
+    	$query = $this->pdo()->prepare($statement);
     	$query->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Collection::class);
     	$query->execute($args);
 
