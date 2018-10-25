@@ -14,26 +14,41 @@ class Model implements ConfigAwareInterface
 
     protected $name = 'db.clientes';
     protected $primary_key = 'codigo';
+    private $select = [];
     private $arguments = [];
-
 
     private function find($id)
     {
-        $this->where($this->primary_key, $id);
+        $this->where($this->primary_key, '=',$id);
         return $this->get();
     }
 
-    private function where(string $column, $value)
+    private function select(...$columns)
     {
-        $this->arguments['where'] = [$column => $value];
+    	foreach ($columns as $column) {
+        	$this->select[] = $column;
+    	}
+    }
+
+    private function where(string $column, string $condition = '=', $value)
+    {
+        $this->arguments['where'][] = [
+        	'column' => $column,
+        	'condition' => $condition,
+        	'value' => $value,
+        	'variable' => ":where_{$column}",
+        	'sql' => "{$column} {$condition} :where_{$column}",
+        ];
+
+        return $this;
     }
 
     private function toSql()
     {
         $sql = "SELECT %s FROM {$this->name}";
 
-        if (isset($this->arguments['select'])) {
-            $select = implode(', ', $this->arguments['select']);
+        if (!empty($this->select)) {
+            $select = implode(', ', $this->select);
         } else {
             $select = '*';
         }
@@ -41,13 +56,11 @@ class Model implements ConfigAwareInterface
         $sql = sprintf($sql, $select);
 
         if (isset($this->arguments['where'])) {
-            $where = '';
-
-            foreach ($this->arguments['where'] as $column => $value) {
-                $where .= "{$column} = :where_{$column}";
-            }
+            $where = array_column($this->arguments['where'], 'sql');
+            $where = implode(' AND ', $where);
 
             $sql .= " WHERE {$where}";
+
         }
 
         return $sql;
@@ -55,6 +68,12 @@ class Model implements ConfigAwareInterface
 
     private function get()
     {
-        return DB::query($this->toSql(), $this->arguments);
+        return DB::query(
+        	$this->toSql(),
+        	array_combine(
+        		array_column($this->arguments['where'], 'variable'),
+        		array_column($this->arguments['where'], 'value')
+        	)
+        );
     }
 }

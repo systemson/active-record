@@ -2,9 +2,9 @@
 
 namespace Tests\Examples;
 
-use Amber\Model\ActiveRecord;
+use Amber\Model\Drivers\Model;
 
-class User extends ActiveRecord
+class User extends Model
 {
 	protected $table = 'users';
 

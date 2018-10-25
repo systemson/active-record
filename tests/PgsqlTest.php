@@ -19,8 +19,8 @@ class PgsqlTest extends TestCase
                 'host' => 'localhost',
                 'port' => '5432',
                 'dbname' => 'systemson-erp',
-                'user' => 'postgres',
-                'password' => 'postgres',
+                'user' => 'deivi',
+                'password' => 'deivi',
             ],
         ];
 
@@ -44,8 +44,10 @@ class PgsqlTest extends TestCase
 
     public function testModel()
     {
-        $model = new Model();
+        //$model = new Model();
 
-        Model::find(1);
+        $model = Model::where('codigo', '=', 1);
+
+        var_dump($model->get());
     }
 }

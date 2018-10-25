@@ -47,7 +47,7 @@ class DB implements ConfigAwareInterface
         return $this->getConfig('password');
     }
 
-    private function credentials()
+    private function credentials(): string
     {
         $configs = $this->getConfig('database');
         unset($configs['driver']);
@@ -61,8 +61,8 @@ class DB implements ConfigAwareInterface
         return $this->getDriver() . ':' . implode(';', $credentials);
     }
 
-    private function connect()
-    {var_dump($this->credentials());
+    private function connect(): PDO
+    {
         return new PDO($this->credentials());
     }
 
