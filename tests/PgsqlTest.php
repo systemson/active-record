@@ -14,44 +14,32 @@ class PgsqlTest extends TestCase
 {
     public function setUp()
     {
+        $dbname = 'amber';
+
         $config = [
             'database' => [
                 'driver' => 'pgsql',
                 'host' => 'localhost',
                 'port' => '5432',
-                //'dbname' => 'systemson-erp',
                 'user' => 'postgres',
                 'password' => 'postgres',
             ],
         ];
 
         Config::set('active_record', $config);
+
+        $this->assertTrue((new Database($dbname))->create());
+
+        $config['database']['dbname'] = $dbname;
+
+        Config::set('active_record', $config);
     }
 
-    public function testDatabase()
+    public function testTable()
     {
-        $dbname = 'amber';
-
-        $db = new Database($dbname);
-
-        //$this->assertFalse($db->exists());
-
-        //$db->create();
-
-        //$this->assertTrue($db->exists());
-
-        $db->drop();
-
-        //$this->assertFalse($db->exists());
-        
     }
 
-    /*public function testConnector()
-    {
-
-    }*/
-
-    /*public function testModel()
+    /*public function testRecords()
     {
         //$model = new Model();
 
@@ -59,4 +47,18 @@ class PgsqlTest extends TestCase
 
         var_dump($model->get());
     }*/
+
+    public function tearDown()
+    {
+        $config = Config::get('active_record'); 
+
+        unset($config['database']['dbname']);
+
+        Config::set('active_record', $config);
+
+        // After updating amber/common should be
+        //Config::unset('active_record.database.dbname');
+
+        $this->assertTrue((new Database('amber'))->drop());
+    }
 }

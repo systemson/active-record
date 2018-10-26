@@ -19,20 +19,23 @@ class Database implements ConfigAwareInterface
     	$this->name = $name;
     }
 
-    public function exists(): bool
+    public function create()
     {
-    	$stmt = Connector::pdo()->query("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{$this->name}'");
-
-		return (bool) $stmt->fetchColumn();
+        return (Connector::pdo()->prepare("CREATE DATABASE {$this->name}"))->execute();
     }
 
-    public function create(bool $override = false)
+    public function createOrReplace()
     {
-    	Connector::pdo()->exec("CREATE DATABASE {$this->name}");
+        return (Connector::pdo()->prepare("CREATE OR REPLACE DATABASE {$this->name}"))->execute();
     }
 
     public function drop()
     {
-    	Connector::pdo()->exec("DROP DATABASE {$this->name}");
+        return (Connector::pdo()->prepare("DROP DATABASE {$this->name}"))->execute();
+    }
+
+    public function dropIfExists()
+    {
+        return (Connector::pdo()->prepare("DROP DATABASE IF EXISTS {$this->name}"))->execute();
     }
 }
