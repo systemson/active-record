@@ -4,7 +4,7 @@ namespace Amber\Model\Config;
 
 use Amber\Config\ConfigAwareTrait as BaseConfig;
 
-trait ConfigAwareTrait 
+trait ConfigAwareTrait
 {
-	use BaseConfig;
+    use BaseConfig;
 }

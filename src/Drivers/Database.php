@@ -2,40 +2,92 @@
 
 namespace Amber\Model\Drivers;
 
+use PDO;
 use Amber\Config\Config;
+use Amber\Model\Contracts\ConnectorInterface;
+use Amber\Collection\Collection;
 use Amber\Model\Config\ConfigAwareInterface;
 use Amber\Model\Config\ConfigAwareTrait;
+use Amber\Utils\Implementations\AbstractSingleton;
 use Amber\Utils\Traits\SingletonTrait;
-use Amber\Model\Drivers\Connector;
 
 class Database implements ConfigAwareInterface
 {
-    use ConfigAwareTrait;
+    use ConfigAwareTrait, SingletonTrait;
 
-    private $name;
-
-    public function __construct(string $name)
+    private function getDriver(): string
     {
-    	$this->name = $name;
+        return $this->getConfig('database.driver');
     }
 
-    public function create()
+    private function getHost(): string
     {
-        return (Connector::pdo()->prepare("CREATE DATABASE {$this->name}"))->execute();
+        return $this->getConfig('database.host');
     }
 
-    public function createOrReplace()
+    private function getPort(): string
     {
-        return (Connector::pdo()->prepare("CREATE OR REPLACE DATABASE {$this->name}"))->execute();
+        return $this->getConfig('database.port');
     }
 
-    public function drop()
+    private function getDbname(): string
     {
-        return (Connector::pdo()->prepare("DROP DATABASE {$this->name}"))->execute();
+        return $this->getConfig('database.dbname');
     }
 
-    public function dropIfExists()
+    private function getUser(): string
     {
-        return (Connector::pdo()->prepare("DROP DATABASE IF EXISTS {$this->name}"))->execute();
+        return $this->getConfig('database.user');
+    }
+
+    private function getPassword(): string
+    {
+        return $this->getConfig('database.password');
+    }
+
+    private function credentials(): string
+    {
+        $configs = $this->getConfig('database');
+        unset($configs['driver']);
+
+        $credentials = [];
+
+        foreach ($configs as $key => $value) {
+            $credentials[] = "{$key}={$value}";
+        }
+
+        return $this->getDriver() . ':' . implode(';', $credentials);
+    }
+
+    private function pdo(): PDO
+    {
+        $pdo = new PDO($this->credentials());
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+
+        return $pdo;
+    }
+
+    private function query(string $statement, iterable $args = []): Collection
+    {
+        $query = $this->pdo()->prepare($statement);
+        $query->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Collection::class);
+        $query->execute($args);
+
+        return new Collection($query->fetchAll());
+    }
+
+    public static function config(array $config)
+    {
+        self::getInstance()->setConfig($config);
+    }
+
+    public static function table(string $name, callable $closure)
+    {
+        $table = new Entity($name);
+
+        $closure($table);
+
+        return true;
     }
 }

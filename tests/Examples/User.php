@@ -6,20 +6,17 @@ use Amber\Model\Drivers\Model;
 
 class User extends Model
 {
-	protected $table = 'users';
+	protected $name = 'users';
 
-	protected $primarykey = 'id';
+	//protected $primary_key = 'id';
 
-	protected $columns = [
-		'user' 			=> 'string(20)',
-		'password'	 	=> 'string(250)',
-		'created_at' 	=> 'date',
-		'edited_at' 	=> 'date',
+	protected $table = [
+		'user'        => 'string|size:20|unique)',
+		'password'    => 'string',
+		'status' 	  => 'boolean|default:true',
+		'created_at'  => 'date',
+		'edited_at'   => 'date',
 	];
-
-	protected $properties;
-
-	protected $original;
 
 	protected $timestamps = true;
 
