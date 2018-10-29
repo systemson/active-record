@@ -1,13 +1,12 @@
 <?php
 
-namespace Amber\Model\Drivers;
+namespace Amber\ActiveRecord\Database;
 
 use PDO;
 use Amber\Config\Config;
-use Amber\Model\Contracts\ConnectorInterface;
 use Amber\Collection\Collection;
-use Amber\Model\Config\ConfigAwareInterface;
-use Amber\Model\Config\ConfigAwareTrait;
+use Amber\ActiveRecord\Config\ConfigAwareInterface;
+use Amber\ActiveRecord\Config\ConfigAwareTrait;
 use Amber\Utils\Implementations\AbstractSingleton;
 use Amber\Utils\Traits\SingletonTrait;
 
@@ -68,7 +67,7 @@ class Database implements ConfigAwareInterface
         return $pdo;
     }
 
-    private function getAll(string $statement, iterable $args = [], $class)
+    private function getAll(string $statement, iterable $args = [], string $class = 'stdClass')
     {
         $query = $this->pdo()->prepare($statement);
         $query->setFetchMode(PDO::FETCH_CLASS, $class);
@@ -77,7 +76,7 @@ class Database implements ConfigAwareInterface
         return $query->fetch();
     }
 
-    private function get(string $statement, iterable $args = [], $class)
+    private function get(string $statement, iterable $args = [], string $class = 'stdClass')
     {
         $stmt = $this->pdo()->prepare($statement);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);

@@ -1,11 +1,11 @@
 <?php
 
-namespace Amber\Model\Drivers;
+namespace Amber\ActiveRecord\Database;
 
 use PDO;
 use Amber\Config\Config;
-use Amber\Model\Config\ConfigAwareInterface;
-use Amber\Model\Config\ConfigAwareTrait;
+use Amber\ActiveRecord\Config\ConfigAwareInterface;
+use Amber\ActiveRecord\Config\ConfigAwareTrait;
 
 /**
  * Abstract layer for handling the database entities.
@@ -37,8 +37,8 @@ class Entity implements ConfigAwareInterface
 
     public function timestamps()
     {
-        $this->attribute(static::CREATED_AT_NAME, 'date');
-        $this->attribute(static::EDITED_AT_NAME, 'date');
+        $this->date(static::CREATED_AT_NAME);
+        $this->date(static::EDITED_AT_NAME);
     }
 
     public function string(string $name, int $size = null)

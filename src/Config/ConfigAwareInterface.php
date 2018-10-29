@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Model\Config;
+namespace Amber\ActiveRecord\Config;
 
 use Amber\Config\ConfigAwareInterface as BaseConfig;
 

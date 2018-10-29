@@ -1,22 +1,25 @@
 <?php
 
-namespace Amber\Model\Drivers;
+namespace Amber\ActiveRecord\Model;
 
+use ArrayAccess;
 use PDO;
 use PDOStatement;
 use Amber\Config\Config;
-use Amber\Model\Config\ConfigAwareInterface;
-use Amber\Model\Config\ConfigAwareTrait;
+use Amber\ActiveRecord\Config\ConfigAwareInterface;
+use Amber\ActiveRecord\Config\ConfigAwareTrait;
 use Amber\Utils\Traits\SingletonTrait;
+use Amber\ActiveRecord\Database\Database;
 use Carbon\Carbon;
 
-class Model
+abstract class Model implements ArrayAccess
 {
-	use SingletonTrait;
+    use SingletonTrait, AccesorTrait;
 
     protected $name;
     protected $primary_key = 'id';
     protected $dates = true;
+    protected $softdelete = false;
 
     private $pk;
     private $attributes = [];
@@ -24,23 +27,23 @@ class Model
 
     public function __construct(PDOStatement $stmt = null)
     {
-    	if (!is_null($stmt)) {
-    		$array = $stmt->fetch();
+        if (!is_null($stmt)) {
+            $array = $stmt->fetch();
 
-    		$this->attributes = $array;
-    		$this->original = $array;
+            $this->attributes = $array;
+            $this->original = $array;
             $this->pk = $array[$this->primary_key] ?? null;
-    	}
+        }
     }
 
     private function insert()
     {
-    	$this->setTimestamps();
+        $this->setTimestamps();
 
-    	$columns = implode(', ', $this->getAttributesColumns());
-    	$values = implode(', ', $this->getAttributesValues());
+        $columns = implode(', ', $this->getAttributesColumns());
+        $values = implode(', ', $this->getAttributesValues());
 
-    	return "INSERT INTO {$this->name} ({$columns}) VALUES ({$values});";
+        return "INSERT INTO {$this->name} ({$columns}) VALUES ({$values});";
     }
 
     private function update()
@@ -57,9 +60,9 @@ class Model
         return $stmt;
     }
 
-    public function diff()
+    private function diff()
     {
-    	return array_diff_assoc($this->attributes, $this->original);
+        return array_diff_assoc($this->attributes, $this->original);
     }
 
     private function updates()
@@ -73,12 +76,12 @@ class Model
 
     private function setTimestamps()
     {
-    	if ($this->dates) {
-    		$now = (string) Carbon::now();
+        if ($this->dates) {
+            $now = (string) Carbon::now();
 
-    		$this->attributes['created_at'] = $now;
-    		$this->attributes['edited_at'] = $now;
-    	}
+            $this->attributes['created_at'] = $now;
+            $this->attributes['edited_at'] = $now;
+        }
     }
 
     private function setEditedAt()
@@ -102,17 +105,17 @@ class Model
 
     private function getAttributesValues()
     {
-    	return array_map(
-    		function ($value) {
-				return $this->value($value, true);
-			},
-			$this->attributes
-		);
+        return array_map(
+            function ($value) {
+                return $this->value($value, true);
+            },
+            $this->attributes
+        );
     }
 
     private function value($value)
     {
-    	return var_export($value, true);
+        return var_export($value, true);
     }
 
     public function save()
@@ -123,7 +126,7 @@ class Model
             return (Database::pdo()->prepare($this->update()))->execute();
         }
 
-    	return false;
+        return false;
     }
 
     public function delete()
@@ -133,27 +136,17 @@ class Model
 
     private function find($id)
     {
-    	$id = [':pk_id' => $this->value($id, true)];
+        $id = [':pk_id' => $this->value($id, true)];
 
-    	return Database::get(
-    		"SELECT * FROM {$this->name} WHERE {$this->primary_key} = :pk_id;",
-    		$id,
-    		static::class
-    	);
+        return Database::get(
+            "SELECT * FROM {$this->name} WHERE {$this->primary_key} = :pk_id;",
+            $id,
+            static::class
+        );
     }
 
     private function primary()
     {
         return $this->pk ?? $this->{$this->primary_key};
-    }
-
-    public function __set($key, $value)
-    {
-    	$this->attributes[$key] = $value;
-    }
-
-    public function __get($key)
-    {
-    	return $this->attributes[$key] ?? null;
     }
 }

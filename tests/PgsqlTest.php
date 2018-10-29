@@ -3,28 +3,34 @@
 namespace Tests;
 
 use Amber\Config\Config;
-use Amber\Model\Drivers\Model;
-use Tests\Examples\User;
-use Amber\Model\Drivers\Database;
-use Amber\Model\Config\ConfigAwareInterface;
-use PHPUnit\Framework\TestCase;
+use Amber\ActiveRecord\Database\Database;
+use Amber\ActiveRecord\Config\ConfigAwareInterface;
 use PDO;
+use PHPUnit\Framework\TestCase;
+use Tests\Examples\User;
 
 class PgsqlTest extends TestCase
 {
     const DB_NAME = 'amber_project';
     const TABLE_NAME = 'users';
 
+    public static function config($name)
+    {
+        $json = json_decode(file_get_contents(getcwd() . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'database.json'), true);
+
+        return $json[$name] ?? null;
+    }
+
     public static function setUpBeforeClass()
     {
         $config = [
             'database' => [
-                'driver' => 'pgsql',
-                'host' => 'localhost',
-                'port' => '5432',
+                'driver' => self::config('driver'),
+                'host' => self::config('host'),
+                'port' => self::config('port'),
                 'dbname' => static::DB_NAME,
-                'user' => 'deivi',
-                'password' => 'deivi',
+                'user' => self::config('user'),
+                'password' => self::config('password'),
             ],
         ];
 
@@ -71,20 +77,32 @@ class PgsqlTest extends TestCase
         // Returns a record from db
         $user = User::find(1);
 
-        $user->username = 'admin';
-        $this->assertTrue($user->save());
+        // Checks that the returned value is a instance of the model class.
+        $this->assertInstanceOf(User::class, $user);
 
-        $this->assertFalse($user->save());
-
-        $this->assertTrue($user->delete());
-
-        return;
-        $this->assertInstance(User::class, $user);
-
+        // Checks the values from table.
         $this->assertEquals(1, $user->id);
         $this->assertEquals('username', $user->username);
         $this->assertEquals('password', $user->password);
         $this->assertEquals(true, $user->status);
+
+        // Sets a new username.
+        $user->username = 'admin';
+
+        // Persists in DB the edited record.
+        $this->assertTrue($user->save());
+
+        // Checks that the new name is in the DB
+        $user = User::find(1);
+        $this->assertEquals('admin', $user->username);
+
+        // Returns false since there is nothing to update.
+        $this->assertFalse($user->save());
+
+        // Deletes the records in DB.
+        $this->assertTrue($user->delete());
+
+        return;
     }
 
     public static function tearDownAfterClass()

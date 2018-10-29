@@ -2,7 +2,7 @@
 
 namespace Tests\Examples;
 
-use Amber\Model\Drivers\Model;
+use Amber\ActiveRecord\Model\Model;
 
 class User extends Model
 {

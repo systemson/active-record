@@ -2,12 +2,13 @@
 
 namespace Amber\Model\Contracts;
 
-interface EssentialsInterface extends ConnectorInterface
+use PDO;
+
+interface EssentialsInterface
 {
+	public function pdo(): PDO;
 
     public function toSql(): string;
 
-    public function toString(): string;
-
-    public function save(): string;
+    public function __toString();
 }

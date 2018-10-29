@@ -1,11 +1,11 @@
 <?php
 
-namespace Amber\Model\Drivers;
+namespace Amber\ActiveRecord\Database;
 
 use PDO;
 use Amber\Config\Config;
-use Amber\Model\Config\ConfigAwareInterface;
-use Amber\Model\Config\ConfigAwareTrait;
+use Amber\ActiveRecord\Config\ConfigAwareInterface;
+use Amber\ActiveRecord\Config\ConfigAwareTrait;
 use Amber\Utils\Traits\SingletonTrait;
 
 /**
@@ -27,22 +27,10 @@ class Attribute implements ConfigAwareInterface
         'boolean' => 'BOOLEAN',
     ];
 
-    public function __construct(string $name = null, string $type = null)
+    public function __construct(string $name, string $type)
     {
         $this->name = $name;
         $this->type = static::TYPES[$type] ?? $type;
-    }
-
-    public function name(string $name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    public function type(string $type)
-    {
-        $this->type = static::TYPES[$type] ?? $type;
-        return $this;
     }
 
     public function size(int $size = null)
@@ -60,7 +48,6 @@ class Attribute implements ConfigAwareInterface
     public function notNull()
     {
         $this->constraints[] = 'NOT NULL';
-
         return $this;
     }
 

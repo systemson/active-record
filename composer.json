@@ -1,5 +1,5 @@
 {
-    "name": "amber/model",
+    "name": "amber/active-record",
     "description": "Simple PHP active record model.",
     "type": "library",
     "license": "GPL-3.0-or-later",
@@ -13,7 +13,7 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Amber\\Model\\": "src/"
+            "Amber\\ActiveRecord\\": "src/"
         }
     },
     "autoload-dev": {
