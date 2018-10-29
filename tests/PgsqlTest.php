@@ -13,19 +13,20 @@ class PgsqlTest extends TestCase
 {
     const DB_NAME = 'amber_project';
     const TABLE_NAME = 'users';
+    const DRIVER_NAME = 'pgsql';
 
     public static function config($name)
     {
-        $json = json_decode(file_get_contents(getcwd() . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'database.json'), true);
+        $json = json_decode(file_get_contents(getcwd() . DIRECTORY_SEPARATOR . 'database.json'), true);
 
-        return $json[$name] ?? null;
+        return $json[static::DRIVER_NAME][$name] ?? null;
     }
 
     public static function setUpBeforeClass()
     {
         $config = [
             'database' => [
-                'driver' => self::config('driver'),
+                'driver' => static::DRIVER_NAME,
                 'host' => self::config('host'),
                 'port' => self::config('port'),
                 'dbname' => static::DB_NAME,
@@ -108,7 +109,7 @@ class PgsqlTest extends TestCase
     public static function tearDownAfterClass()
     {
         Database::table(static::TABLE_NAME, function ($table) {
-            //$table->dropIfExists();
+            $table->dropIfExists();
         });
     }
 }

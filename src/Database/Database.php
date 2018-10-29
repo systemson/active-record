@@ -48,6 +48,8 @@ class Database implements ConfigAwareInterface
     {
         $configs = $this->getConfig('database');
         unset($configs['driver']);
+        unset($configs['user']);
+        unset($configs['password']);
 
         $credentials = [];
 
@@ -60,7 +62,7 @@ class Database implements ConfigAwareInterface
 
     private function pdo(): PDO
     {
-        $pdo = new PDO($this->credentials());
+        $pdo = new PDO($this->credentials(), $this->getUser(), $this->getPassword());
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
 
