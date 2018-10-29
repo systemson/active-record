@@ -17,6 +17,9 @@ class Entity implements ConfigAwareInterface
     public $name;
     public $attributes = [];
 
+    const CREATED_AT_NAME = 'created_at';
+    const EDITED_AT_NAME = 'edited_at';
+
     public function __construct($name)
     {
         $this->name = $name;
@@ -30,6 +33,12 @@ class Entity implements ConfigAwareInterface
     public function id(string $name = 'id')
     {
         return $this->attribute($name, 'SERIAL')->primary();
+    }
+
+    public function timestamps()
+    {
+        $this->attribute(static::CREATED_AT_NAME, 'date');
+        $this->attribute(static::EDITED_AT_NAME, 'date');
     }
 
     public function string(string $name, int $size = null)

@@ -68,13 +68,22 @@ class Database implements ConfigAwareInterface
         return $pdo;
     }
 
-    private function query(string $statement, iterable $args = []): Collection
+    private function getAll(string $statement, iterable $args = [], $class)
     {
         $query = $this->pdo()->prepare($statement);
-        $query->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Collection::class);
+        $query->setFetchMode(PDO::FETCH_CLASS, $class);
         $query->execute($args);
 
-        return new Collection($query->fetchAll());
+        return $query->fetch();
+    }
+
+    private function get(string $statement, iterable $args = [], $class)
+    {
+        $stmt = $this->pdo()->prepare($statement);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute($args);
+
+        return new $class($stmt);
     }
 
     public static function config(array $config)

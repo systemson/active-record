@@ -4,6 +4,7 @@ namespace Tests;
 
 use Amber\Config\Config;
 use Amber\Model\Drivers\Model;
+use Tests\Examples\User;
 use Amber\Model\Drivers\Database;
 use Amber\Model\Config\ConfigAwareInterface;
 use PHPUnit\Framework\TestCase;
@@ -11,17 +12,17 @@ use PDO;
 
 class PgsqlTest extends TestCase
 {
-    protected $dbname = 'amber_project';
-    protected $table = 'users';
+    const DB_NAME = 'amber_project';
+    const TABLE_NAME = 'users';
 
-    public function setUp()
+    public static function setUpBeforeClass()
     {
         $config = [
             'database' => [
                 'driver' => 'pgsql',
                 'host' => 'localhost',
                 'port' => '5432',
-                'dbname' => $this->dbname,
+                'dbname' => static::DB_NAME,
                 'user' => 'deivi',
                 'password' => 'deivi',
             ],
@@ -29,20 +30,19 @@ class PgsqlTest extends TestCase
 
         Config::set('active_record', $config);
 
-        Database::table($this->table, function ($table) {
+        Database::table(static::TABLE_NAME, function ($table) {
             $table->dropIfExists();
         });
     }
 
     public function testTable()
     {
-        $create = Database::table($this->table, function ($table) {
+        $create = Database::table(static::TABLE_NAME, function ($table) {
             $table->id();
             $table->string('username', 50)->unique();
             $table->string('password');
             $table->boolean('status')->default(true);
-            $table->date('created_at');
-            $table->date('edited_at');
+            $table->timestamps();
 
             $table->create();
         });
@@ -50,38 +50,46 @@ class PgsqlTest extends TestCase
         $this->assertTrue($create);
     }
 
-    /*public function testRecords()
+    public function testRecords()
     {
         // Creates a new record
-        $model = new Model();
+        $user = new User();
 
-        $model->username = 'username';
-        $model->password = 'password';
+        $user->username = 'username';
+        $user->password = 'password';
 
-        $this->assertTrue($model->save());
+        $this->assertTrue($user->save());
 
         // Counts records
-        $this->assertEquals(1, Model::count());
+        //$this->assertEquals(1, User::count());
 
         // Whether the record exists
-        $this->assertTrue(Model::has(1));
-        $this->assertTrue(Model::hasUserName('username'));
-        $this->assertTrue(Model::hasPassword('password'));
+        //$this->assertTrue(User::has(1));
+        //$this->assertTrue(User::hasUserName('username'));
+        //$this->assertTrue(User::hasPassword('password'));
 
         // Returns a record from db
-        $user = Model::find(1);
+        $user = User::find(1);
 
-        $this->assertInstance(Model::class, $user);
+        $user->username = 'admin';
+        $this->assertTrue($user->save());
+
+        $this->assertFalse($user->save());
+
+        $this->assertTrue($user->delete());
+
+        return;
+        $this->assertInstance(User::class, $user);
 
         $this->assertEquals(1, $user->id);
         $this->assertEquals('username', $user->username);
         $this->assertEquals('password', $user->password);
         $this->assertEquals(true, $user->status);
-    }*/
+    }
 
-    public function tearDown()
+    public static function tearDownAfterClass()
     {
-        Database::table($this->table, function ($table) {
+        Database::table(static::TABLE_NAME, function ($table) {
             //$table->dropIfExists();
         });
     }
