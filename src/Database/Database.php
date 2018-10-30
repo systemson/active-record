@@ -100,4 +100,11 @@ class Database implements ConfigAwareInterface
 
         return true;
     }
+
+    public static function model($model)
+    {
+        $table = new Entity($name);
+
+        $closure($table);
+    }
 }

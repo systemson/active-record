@@ -7,12 +7,11 @@ use Exception;
 trait AccesorTrait
 {
     public function offsetSet($offset, $valor) {
-
         if (is_null($offset)) {
         	throw new Exception('Model attributes must contain a valid name;');
         }
 
-        $this->contenedor[$offset] = $valor;
+        $this->attributes[$offset] = $valor;
     }
 
     public function offsetExists($offset) {

@@ -20,9 +20,10 @@ class Entity implements ConfigAwareInterface
     const CREATED_AT_NAME = 'created_at';
     const EDITED_AT_NAME = 'edited_at';
 
-    public function __construct($name)
+    public function __construct($name, $attributes = [])
     {
         $this->name = $name;
+        $this->attributes = $attributes;
     }
 
     public function attribute(string $name, string $type)
@@ -79,14 +80,21 @@ class Entity implements ConfigAwareInterface
 
     private function toSql()
     {
-        $attributes = !empty($this->attributes) ? '(' . implode(', ', $this->attributes) . ')' : null;
+        $attributes = !empty($this->attributes) ?
+            '(' . implode(', ', $this->attributes) . ')' :
+            null;
 
         return trim("{$this->name} {$attributes}");
     }
 
+    public function createStmt()
+    {
+        return trim("CREATE TABLE {$this->toSql()}");
+    }
+
     public function create()
     {
-        (Database::pdo()->prepare("CREATE TABLE {$this->toSql()};"))->execute();
+        (Database::pdo()->prepare($this->createStmt()))->execute();
     }
 
     public function createOrReplace()
@@ -107,5 +115,10 @@ class Entity implements ConfigAwareInterface
     public function dropIfExists()
     {
         (Database::pdo()->prepare("DROP TABLE IF EXISTS {$this->name};"))->execute();
+    }
+
+    public function __toString()
+    {
+        return $this->createStmt();
     }
 }

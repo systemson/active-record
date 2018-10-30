@@ -11,13 +11,16 @@ use Amber\ActiveRecord\Config\ConfigAwareTrait;
 use Amber\Utils\Traits\SingletonTrait;
 use Amber\ActiveRecord\Database\Database;
 use Carbon\Carbon;
+use Amber\ActiveRecord\Database\Attribute;
+use Amber\ActiveRecord\Database\Entity;
 
 abstract class Model implements ArrayAccess
 {
-    use SingletonTrait, AccesorTrait;
+    use SingletonTrait, AccesorTrait, QueriesTrait;
 
     protected $name;
     protected $primary_key = 'id';
+    protected $columns = [];
     protected $dates = true;
     protected $softdelete = false;
 
@@ -34,30 +37,6 @@ abstract class Model implements ArrayAccess
             $this->original = $array;
             $this->pk = $array[$this->primary_key] ?? null;
         }
-    }
-
-    private function insert()
-    {
-        $this->setTimestamps();
-
-        $columns = implode(', ', $this->getAttributesColumns());
-        $values = implode(', ', $this->getAttributesValues());
-
-        return "INSERT INTO {$this->name} ({$columns}) VALUES ({$values});";
-    }
-
-    private function update()
-    {
-        $this->setEditedAt();
-
-        $stmt = "UPDATE {$this->name} SET {$this->updates()} WHERE {$this->primary_key} = {$this->primary()};";
-
-        $this->original = array_replace(
-            $this->original,
-            $this->diff()
-        );
-
-        return $stmt;
     }
 
     private function diff()
@@ -118,35 +97,47 @@ abstract class Model implements ArrayAccess
         return var_export($value, true);
     }
 
-    public function save()
-    {
-        if (empty($this->original)) {
-            return (Database::pdo()->prepare($this->insert()))->execute();
-        } elseif (!empty($this->diff())) {
-            return (Database::pdo()->prepare($this->update()))->execute();
-        }
-
-        return false;
-    }
-
-    public function delete()
-    {
-        return Database::pdo()->exec("DELETE FROM {$this->name} WHERE {$this->primary_key} = {$this->primary()};") > 0;
-    }
-
-    private function find($id)
-    {
-        $id = [':pk_id' => $this->value($id, true)];
-
-        return Database::get(
-            "SELECT * FROM {$this->name} WHERE {$this->primary_key} = :pk_id;",
-            $id,
-            static::class
-        );
-    }
-
     private function primary()
     {
         return $this->pk ?? $this->{$this->primary_key};
+    }
+
+    private function columns()
+    {
+        foreach ($this->columns as $name => $options) {
+            $array = explode('|', $options);
+
+            $type =  array_shift($array);
+            $constraints = $array;
+
+            $attributes[] = $this->handleColum($name, $type, $constraints);
+        }
+
+        return $attributes;
+    }
+
+    private function handleColum($name, $type, $constraints)
+    {
+        $column = new Attribute($name, $type);
+
+        return $this->applyConstraints($column, $constraints);
+    }
+
+    private function applyConstraints($column, $constraints)
+    {
+        foreach ($constraints as $value) {
+            $array = explode(':', $value);
+            $method =  array_shift($array);
+            $arg =  $array;
+
+            $column = call_user_func_array([$column, $method], $arg);
+        }
+
+        return $column;
+    }
+
+    public function sql()
+    {
+        return (string) (new Entity($this->name, $this->columns()));
     }
 }

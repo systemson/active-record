@@ -26,7 +26,7 @@ class PgsqlTest extends TestCase
     {
         $config = [
             'database' => [
-                'driver' => static::DRIVER_NAME,
+                'driver' => self::config('driver'),
                 'host' => self::config('host'),
                 'port' => self::config('port'),
                 'dbname' => static::DB_NAME,
@@ -46,9 +46,10 @@ class PgsqlTest extends TestCase
     {
         $create = Database::table(static::TABLE_NAME, function ($table) {
             $table->id();
-            $table->string('username', 50)->unique();
-            $table->string('password');
-            $table->boolean('status')->default(true);
+            $table->string('username', 50)->unique()->notNull();
+            $table->string('password')->notNull();
+            $table->boolean('status')->default(true)->notNull();
+            $table->integer('role_id')->default(0);
             $table->timestamps();
 
             $table->create();
@@ -63,9 +64,12 @@ class PgsqlTest extends TestCase
         $user = new User();
 
         $user->username = 'username';
-        $user->password = 'password';
+        $user['password'] = 'password';
 
         $this->assertTrue($user->save());
+
+        // Checks that the record is persisted in DB.
+        $this->assertFalse($user->save());
 
         // Counts records
         //$this->assertEquals(1, User::count());
@@ -109,7 +113,7 @@ class PgsqlTest extends TestCase
     public static function tearDownAfterClass()
     {
         Database::table(static::TABLE_NAME, function ($table) {
-            $table->dropIfExists();
+            //$table->dropIfExists();
         });
     }
 }
