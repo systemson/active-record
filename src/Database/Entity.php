@@ -16,6 +16,7 @@ class Entity implements ConfigAwareInterface
 
     public $name;
     public $attributes = [];
+    public $original = [];
 
     const CREATED_AT_NAME = 'created_at';
     const EDITED_AT_NAME = 'edited_at';

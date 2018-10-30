@@ -56,6 +56,21 @@ class PgsqlTest extends TestCase
         });
 
         $this->assertTrue($create);
+
+        $drop = Database::table(static::TABLE_NAME, function ($table) {
+            $table->drop();
+        });
+
+        $this->assertTrue($drop);
+    }
+
+    public function testTableFromModel()
+    {
+        $create = Database::model(User::class, function ($table) {
+            $table->create();
+        });
+
+        $this->assertTrue($create);
     }
 
     public function testRecords()
@@ -105,7 +120,7 @@ class PgsqlTest extends TestCase
         $this->assertFalse($user->save());
 
         // Deletes the records in DB.
-        $this->assertTrue($user->delete());
+        //$this->assertTrue($user->delete());
 
         return;
     }

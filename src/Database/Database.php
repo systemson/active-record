@@ -3,16 +3,24 @@
 namespace Amber\ActiveRecord\Database;
 
 use PDO;
+use PDOStatement;
 use Amber\Config\Config;
 use Amber\Collection\Collection;
 use Amber\ActiveRecord\Config\ConfigAwareInterface;
 use Amber\ActiveRecord\Config\ConfigAwareTrait;
 use Amber\Utils\Implementations\AbstractSingleton;
 use Amber\Utils\Traits\SingletonTrait;
+use Amber\Utils\Traits\BaseFactoryTrait;
 
+/**
+ * @todo SHOULD extend PDO.
+ * @todo NEEDS refactoring.
+ */
 class Database implements ConfigAwareInterface
 {
-    use ConfigAwareTrait, SingletonTrait;
+    use ConfigAwareTrait, BaseFactoryTrait;
+
+    private $pdo;
 
     private function getDriver(): string
     {
@@ -44,12 +52,10 @@ class Database implements ConfigAwareInterface
         return $this->getConfig('database.password');
     }
 
-    private function credentials(): string
+    private function credentials(): array
     {
         $configs = $this->getConfig('database');
-        unset($configs['driver']);
-        unset($configs['user']);
-        unset($configs['password']);
+        $configs = array_diff_key($configs, array_flip(['driver', 'user', 'password']));
 
         $credentials = [];
 
@@ -57,16 +63,32 @@ class Database implements ConfigAwareInterface
             $credentials[] = "{$key}={$value}";
         }
 
-        return $this->getDriver() . ':' . implode(';', $credentials);
+        return [
+            $this->getDriver() . ':' . implode(';',$credentials),
+            $this->getUser(),
+            $this->getPassword()
+        ];
     }
 
     private function pdo(): PDO
     {
-        $pdo = new PDO($this->credentials(), $this->getUser(), $this->getPassword());
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+        if (!$this->pdo instanceof PDO) {
+            $this->pdo = $this->make(PDO::class, $this->credentials());
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+        }
 
-        return $pdo;
+        return $this->pdo;
+    }
+
+    private function getStatement(string $statement): PDOStatement
+    {
+        return $this->pdo()->prepare($statement);
+    }
+
+    private function run(string $statement, iterable $args = []): bool
+    {
+        return $this->pdo()->prepare($statement)->execute($args);
     }
 
     private function getAll(string $statement, iterable $args = [], string $class = 'stdClass')
@@ -75,7 +97,7 @@ class Database implements ConfigAwareInterface
         $query->setFetchMode(PDO::FETCH_CLASS, $class);
         $query->execute($args);
 
-        return $query->fetch();
+        return $query->fetchAll();
     }
 
     private function get(string $statement, iterable $args = [], string $class = 'stdClass')
@@ -85,6 +107,15 @@ class Database implements ConfigAwareInterface
         $stmt->execute($args);
 
         return new $class($stmt);
+    }
+
+    private function getArray(string $statement, iterable $args = [])
+    {
+        $stmt = $this->pdo()->prepare($statement);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute($args);
+
+        return $stmt->fetch();
     }
 
     public static function config(array $config)
@@ -101,10 +132,12 @@ class Database implements ConfigAwareInterface
         return true;
     }
 
-    public static function model($model)
+    public static function model($class, callable $closure)
     {
-        $table = new Entity($name);
+        $table = (new $class())->table();
 
         $closure($table);
+
+        return true;
     }
 }
