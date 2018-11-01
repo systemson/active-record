@@ -7,12 +7,14 @@ use Amber\ActiveRecord\Database\Entity;
 use Amber\ActiveRecord\Database\Attribute;
 use PDOStatement;
 
-/** 
+/**
  */
 trait DataDefinitionTrait
 {
     private function columns()
     {
+        $attributes[] = $this->handleColum('id', 'SERIAL', ['primary']);
+
         foreach ($this->columns as $name => $options) {
             $array = explode('|', $options);
 
@@ -47,6 +49,15 @@ trait DataDefinitionTrait
 
     public function table(): Entity
     {
-        return new Entity($this->name, $this->columns());
+        $table = new Entity($this->name, $this->columns());
+
+        if ($this->dates) {
+            $table->timestamps();
+        }
+
+        if ($this->softdelete) {
+            //$table->softdelete();
+        }
+        return $table;
     }
 }

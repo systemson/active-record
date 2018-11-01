@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use PDO;
 use PDOStatement;
 
-/** 
+/**
  * @todo SHOULD store it's own PDO instance.
  * @todo NEEDS refactoring.
  */
@@ -17,15 +17,20 @@ trait DataHandlerTrait
 
     private function pdo(): PDO
     {
+        if (!$this->pdo instanceof PDO) {
+            $this->pdo = Database::pdo();
+        }
+
+        return $this->pdo;
     }
 
     private function insert()
     {
-        $success = Database::run($this->getInsertStmt());
+        $success = $this->pdo()->run($this->getInsertStmt());
         
         if ($success) {
-            $id = Database::pdo()->lastInsertId();
-            $array = Database::getArray("SELECT * FROM {$this->name} WHERE {$this->primary_key} = $id;");
+            $id = $this->pdo()->lastInsertId();
+            $array = $this->pdo()->getArray("SELECT * FROM {$this->name} WHERE {$this->primary_key} = $id;");
 
             $this->updateAttributes($array, $id);
         }
@@ -61,7 +66,7 @@ trait DataHandlerTrait
 
     private function update()
     {
-        return Database::run($this->getUpdateStmt());
+        return $this->pdo()->run($this->getUpdateStmt());
     }
 
     private function getUpdateStmt()
@@ -126,7 +131,7 @@ trait DataHandlerTrait
 
     public function delete()
     {
-        return Database::run("DELETE FROM {$this->name} WHERE {$this->primary_key} = {$this->primary()};");
+        return $this->pdo()->run("DELETE FROM {$this->name} WHERE {$this->primary_key} = {$this->primary()};");
     }
 
     private function getDeleteStmt()
@@ -147,7 +152,7 @@ trait DataHandlerTrait
     {
         $id = [':pk_id' => $this->value($id)];
 
-        return Database::get(
+        return $this->pdo()->get(
             "SELECT * FROM {$this->name} WHERE {$this->primary_key} = :pk_id;",
             $id,
             static::class

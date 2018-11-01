@@ -91,8 +91,11 @@ class PgsqlTest extends TestCase
 
         // Whether the record exists
         //$this->assertTrue(User::has(1));
-        //$this->assertTrue(User::hasUserName('username'));
+        //$this->assertTrue(User::hasUsername('username'));
         //$this->assertTrue(User::hasPassword('password'));
+
+        // Unset $user to be sure the find method returns a new instance.
+        unset($user);
 
         // Returns a record from db
         $user = User::find(1);
@@ -112,6 +115,9 @@ class PgsqlTest extends TestCase
         // Persists in DB the edited record.
         $this->assertTrue($user->save());
 
+        // Unset $user to be sure the find method returns a new instance.
+        unset($user);
+
         // Checks that the new name is in the DB
         $user = User::find(1);
         $this->assertEquals('admin', $user->username);
@@ -120,7 +126,7 @@ class PgsqlTest extends TestCase
         $this->assertFalse($user->save());
 
         // Deletes the records in DB.
-        //$this->assertTrue($user->delete());
+        $this->assertTrue($user->delete());
 
         return;
     }
@@ -128,7 +134,7 @@ class PgsqlTest extends TestCase
     public static function tearDownAfterClass()
     {
         Database::table(static::TABLE_NAME, function ($table) {
-            //$table->dropIfExists();
+            $table->dropIfExists();
         });
     }
 }

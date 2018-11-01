@@ -13,8 +13,8 @@ use Amber\Utils\Traits\SingletonTrait;
 use Amber\Utils\Traits\BaseFactoryTrait;
 
 /**
- * @todo SHOULD extend PDO.
  * @todo NEEDS refactoring.
+ * @todo Should implement Data Mapper pattern.
  */
 class Database implements ConfigAwareInterface
 {
@@ -64,7 +64,7 @@ class Database implements ConfigAwareInterface
         }
 
         return [
-            $this->getDriver() . ':' . implode(';',$credentials),
+            $this->getDriver() . ':' . implode(';', $credentials),
             $this->getUser(),
             $this->getPassword()
         ];
@@ -72,11 +72,11 @@ class Database implements ConfigAwareInterface
 
     private function pdo(): PDO
     {
-        if (!$this->pdo instanceof PDO) {
-            $this->pdo = $this->make(PDO::class, $this->credentials());
+        //if (!$this->pdo instanceof PDO) {
+            $this->pdo = $this->make(AmberPDO::class, $this->credentials());
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-        }
+        //}
 
         return $this->pdo;
     }

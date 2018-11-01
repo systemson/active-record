@@ -6,23 +6,27 @@ use Exception;
 
 trait AccesorTrait
 {
-    public function offsetSet($offset, $valor) {
+    public function offsetSet($offset, $valor)
+    {
         if (is_null($offset)) {
-        	throw new Exception('Model attributes must contain a valid name;');
+            throw new Exception('Model attributes must contain a valid name;');
         }
 
         $this->attributes[$offset] = $valor;
     }
 
-    public function offsetExists($offset) {
+    public function offsetExists($offset)
+    {
         return isset($this->attributes[$offset]);
     }
 
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset)
+    {
         throw new Exception('Model attributes can not be deleted');
     }
 
-    public function offsetGet($offset) {
+    public function offsetGet($offset)
+    {
         return $this->attributes[$offset] ?? null;
     }
 

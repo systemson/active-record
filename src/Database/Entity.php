@@ -21,7 +21,7 @@ class Entity implements ConfigAwareInterface
     const CREATED_AT_NAME = 'created_at';
     const EDITED_AT_NAME = 'edited_at';
 
-    public function __construct($name, $attributes = [])
+    public function __construct($name, $attributes = [], $pk = 'id')
     {
         $this->name = $name;
         $this->attributes = $attributes;

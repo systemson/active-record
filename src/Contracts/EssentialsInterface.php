@@ -6,7 +6,7 @@ use PDO;
 
 interface EssentialsInterface
 {
-	public function pdo(): PDO;
+    public function pdo(): PDO;
 
     public function toSql(): string;
 
