@@ -10,6 +10,8 @@ use Amber\Utils\Traits\SingletonTrait;
 
 /**
  * Abstract layer for handling the database attributes.
+ *
+ * @todo MUST validate values on setting and/or getting.
  */
 class Attribute implements ConfigAwareInterface
 {
@@ -17,6 +19,7 @@ class Attribute implements ConfigAwareInterface
 
     private $name;
     private $type;
+    private $value;
     private $size;
     private $constraints = [];
 

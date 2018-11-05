@@ -10,6 +10,11 @@ use Amber\Utils\Traits\SingletonTrait;
 use PDO;
 use PDOStatement;
 
+/**
+ * This class represents the records to be persisted.
+ *
+ * @todo MUST implement Attribute class for every attribute of the Model.
+ */
 abstract class Model implements ArrayAccess
 {
     use SingletonTrait, AccesorTrait, DataHandlerTrait, DataDefinitionTrait;
@@ -42,6 +47,6 @@ abstract class Model implements ArrayAccess
     {
         $this->attributes = $array;
         $this->original = $array;
-        $this->pk = $pk ?? $array[$this->primary_key];
+        $this->pk = $array[$this->primary_key] ?? $pk;
     }
 }

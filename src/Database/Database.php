@@ -13,14 +13,14 @@ use Amber\Utils\Traits\SingletonTrait;
 use Amber\Utils\Traits\BaseFactoryTrait;
 
 /**
+ * PDO Factory class.
+ *
  * @todo NEEDS refactoring.
  * @todo Should implement Data Mapper pattern.
  */
 class Database implements ConfigAwareInterface
 {
-    use ConfigAwareTrait, BaseFactoryTrait;
-
-    private $pdo;
+    use ConfigAwareTrait, SingletonTrait, BaseFactoryTrait;
 
     private function getDriver(): string
     {
@@ -72,18 +72,11 @@ class Database implements ConfigAwareInterface
 
     private function pdo(): PDO
     {
-        //if (!$this->pdo instanceof PDO) {
-            $this->pdo = $this->make(AmberPDO::class, $this->credentials());
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-        //}
+        $pdo = $this->make(AmberPDO::class, $this->credentials());
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
 
-        return $this->pdo;
-    }
-
-    private function getStatement(string $statement): PDOStatement
-    {
-        return $this->pdo()->prepare($statement);
+        return $pdo;
     }
 
     private function run(string $statement, iterable $args = []): bool

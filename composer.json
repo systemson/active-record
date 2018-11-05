@@ -37,11 +37,6 @@
         "docs": "phpdoc -d ./src -i Tests/ -t ./tmp/docs/api",
         "sniff": "phpcs --standard=PSR12 ./src",
         "fix-cs": "phpcbf --standard=PSR12 ./src",
-        "speed": "php ./tests/Benchmark.php",
-        "push": [
-            "git add .",
-            "git commit -m \"Updates\"",
-            "git push origin master"
-        ]
+        "speed": "php ./tests/Benchmark.php"
     }
 }
