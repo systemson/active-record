@@ -7,7 +7,7 @@ use Amber\ActiveRecord\Database\Database;
 use Amber\ActiveRecord\Config\ConfigAwareInterface;
 use PDO;
 use PHPUnit\Framework\TestCase;
-use Tests\Examples\User;
+use Tests\Example\User;
 
 class PgsqlTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Examples;
+namespace Tests\Example;
 
 use Amber\ActiveRecord\Model\Model;
 
