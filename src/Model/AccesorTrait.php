@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\ActiveRecord\Model;
+namespace Amber\Gemstone\Model;
 
 use Exception;
 

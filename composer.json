@@ -1,5 +1,5 @@
 {
-    "name": "amber/active-record",
+    "name": "amber/gemstone",
     "description": "Simple PHP active record model.",
     "type": "library",
     "license": "GPL-3.0-or-later",
@@ -13,7 +13,7 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Amber\\ActiveRecord\\": "src/"
+            "Amber\\Gemstone\\": "src/"
         }
     },
     "autoload-dev": {

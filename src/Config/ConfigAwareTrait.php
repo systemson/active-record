@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\ActiveRecord\Config;
+namespace Amber\Gemstone\Config;
 
 use Amber\Config\ConfigAwareTrait as BaseConfig;
 

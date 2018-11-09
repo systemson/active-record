@@ -1,11 +1,11 @@
 <?php
 
-namespace Amber\ActiveRecord\Model;
+namespace Amber\Gemstone\Model;
 
 use ArrayAccess;
 use Amber\Config\Config;
-use Amber\ActiveRecord\Config\ConfigAwareInterface;
-use Amber\ActiveRecord\Config\ConfigAwareTrait;
+use Amber\Gemstone\Config\ConfigAwareInterface;
+use Amber\Gemstone\Config\ConfigAwareTrait;
 use Amber\Utils\Traits\SingletonTrait;
 use PDO;
 use PDOStatement;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Model\Contracts;
+namespace Amber\Gemstone\Contracts;
 
 interface RecordInterface extends EssentialsInterface
 {

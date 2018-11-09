@@ -1,10 +1,10 @@
 <?php
 
-namespace Amber\ActiveRecord\Model;
+namespace Amber\Gemstone\Model;
 
-use Amber\ActiveRecord\Database\Database;
-use Amber\ActiveRecord\Database\Entity;
-use Amber\ActiveRecord\Database\Attribute;
+use Amber\Gemstone\Database\Database;
+use Amber\Gemstone\Database\Entity;
+use Amber\Gemstone\Database\Attribute;
 use PDOStatement;
 
 /**

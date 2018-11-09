@@ -1,13 +1,13 @@
 <?php
 
-namespace Amber\ActiveRecord\Database;
+namespace Amber\Gemstone\Database;
 
 use PDO;
 use PDOStatement;
 use Amber\Config\Config;
 use Amber\Collection\Collection;
-use Amber\ActiveRecord\Config\ConfigAwareInterface;
-use Amber\ActiveRecord\Config\ConfigAwareTrait;
+use Amber\Gemstone\Config\ConfigAwareInterface;
+use Amber\Gemstone\Config\ConfigAwareTrait;
 use Amber\Utils\Implementations\AbstractSingleton;
 use Amber\Utils\Traits\SingletonTrait;
 use Amber\Utils\Traits\BaseFactoryTrait;

@@ -3,8 +3,8 @@
 namespace Tests;
 
 use Amber\Config\Config;
-use Amber\ActiveRecord\Database\Database;
-use Amber\ActiveRecord\Config\ConfigAwareInterface;
+use Amber\Gemstone\Database\Database;
+use Amber\Gemstone\Config\ConfigAwareInterface;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use Tests\Example\User;
@@ -35,7 +35,7 @@ class PgsqlTest extends TestCase
             ],
         ];
 
-        Config::set('active_record', $config);
+        Config::set('gemstone', $config);
 
         Database::table(static::TABLE_NAME, function ($table) {
             $table->dropIfExists();

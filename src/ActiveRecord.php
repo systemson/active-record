@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Model;
+namespace Amber\Gemstone;
 
 /**
  * @todo MUST decide what architecture base this project. Active Record or Data Mapper.

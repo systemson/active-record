@@ -2,7 +2,7 @@
 
 namespace Tests\Example;
 
-use Amber\ActiveRecord\Model\Model;
+use Amber\Gemstone\Model\Model;
 
 class User extends Model
 {

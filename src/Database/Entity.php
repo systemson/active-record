@@ -1,11 +1,11 @@
 <?php
 
-namespace Amber\ActiveRecord\Database;
+namespace Amber\Gemstone\Database;
 
 use PDO;
 use Amber\Config\Config;
-use Amber\ActiveRecord\Config\ConfigAwareInterface;
-use Amber\ActiveRecord\Config\ConfigAwareTrait;
+use Amber\Gemstone\Config\ConfigAwareInterface;
+use Amber\Gemstone\Config\ConfigAwareTrait;
 
 /**
  * Abstract layer for handling the database entities.

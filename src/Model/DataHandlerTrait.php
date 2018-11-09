@@ -1,8 +1,8 @@
 <?php
 
-namespace Amber\ActiveRecord\Model;
+namespace Amber\Gemstone\Model;
 
-use Amber\ActiveRecord\Database\Database;
+use Amber\Gemstone\Database\Database;
 use Carbon\Carbon;
 use PDO;
 use PDOStatement;
