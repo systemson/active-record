@@ -1,2 +1,2 @@
-# active-record
-Simple PHP active record model
+# GEMSTONE
+Simple PHP Database Abstraction Layer
