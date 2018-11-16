@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gemstone>
+  <!-- Los registros en el almacenamiento (por eje. en la bd) -->
+  <!-- Un recurso puede ser construido a partir de varias tablas físicas -->
+  <resource>
+    <id>
+      <name>id</name>
+      <!-- Se escribe cuando se comunica con el almacen -->
+      <value>1</value>
+    </id>
+    <provider>...</provider>
+    <attributes>
+      <attribute>
+        <!-- Agregar todas las conditions del atributo desde el proveedor -->
+        <!-- Cuando se crea se escribe acá -->
+        <current_value>1</current_value>
+        <!-- Cuando se extrae se escribe acá -->
+        <stored_value>1</stored_value>
+        <!-- Cuando se guarda se escribe en los dos -->
+      </attribute>
+      <attribute>
+        <!-- Agregar todas las conditions del atributo desde el proveedor -->
+        <!-- Cuando se crea se escribe acá -->
+        <current_value>deivi</current_value>
+        <!-- Cuando se extrae se escribe acá -->
+        <stored_value>deivi</stored_value>
+        <!-- Cuando se guarda se escribe en los dos -->
+      </attribute>
+      <attribute>
+        <!-- Agregar todas las conditions del atributo desde el proveedor -->
+        <!-- Cuando se crea se escribe acá -->
+        <current_value>admin</current_value>
+        <!-- Cuando se extrae se guarda acá -->
+        <stored_value>admin</stored_value>
+        <!-- Cuando se guarda se escribe en los dos -->
+      </attribute>
+      <attribute>
+        <!-- Agregar todas las conditions del atributo desde el proveedor -->
+        <!-- Cuando se crea se escribe acá -->
+        <current_value>hashhashhash</current_value>
+        <!-- Cuando se extrae se guarda acá -->
+        <stored_value>hashhashhash</stored_value>
+        <!-- Cuando se guarda se escribe en los dos -->
+      </attribute>
+      <attribute>
+        <!-- Agregar todas las conditions del atributo desde el proveedor -->
+        <!-- Cuando se crea se escribe acá -->
+        <current_value>2018-15-11 10:30:00</current_value>
+        <!-- Cuando se extrae se guarda acá -->
+        <stored_value>2018-15-11 10:30:00</stored_value>
+        <!-- Cuando se guarda se escribe en los dos -->
+      </attribute>
+      <attribute>
+        <!-- Agregar todas las conditions del atributo desde el proveedor -->
+        <!-- Cuando se crea se escribe acá -->
+        <current_value>2018-15-11 10:30:00</current_value>
+        <!-- Cuando se extrae se guarda acá -->
+        <stored_value>2018-15-11 10:30:00</stored_value>
+        <!-- Cuando se guarda se escribe en los dos -->
+      </attribute>
+    </attributes>
+    <relations>
+      <provider>
+        <name>users</name>
+      </provider>
+      <!-- Los recursos relacionados deben ser cargados en demanda al momento de consultar extraer el recurso de la BD -->
+      <resource>
+        ...
+      </resource>
+    </relations>
+  </resource>
+
+  <!-- Los recursos pueden ser agrupados en una collection de recursos -->
+  <resources>
+    <resource>...</resource>
+    <resource>...</resource>
+    <resource>...</resource>
+  </resources>
+
+  <!-- El almacen es la capa abstracta que se comunica con el almacenamiento físico -->
+  <!-- El almacen se puede corresponder con una o varias bases de datos y/o otras formas de almacenamiento (cache, filesystem, etc.) -->
+  <storage>
+    <!-- El almacen debe inyectar el mediador en el proveedor -->
+    <providers>
+      <!-- El proveedor se encarga de procesar los recursos -->
+      <provider>
+        <name>users</name>
+        <id>id</id>
+        <attributes>
+          <attribute>
+            <name>name</name>
+            <type>string</type>
+            <size>50</size>
+            <default></default>
+            <conditions>
+              <condition>required</condition>
+            </conditions>
+          </attribute>
+          <attribute>
+            <name>username</name>
+            <type>string</type>
+            <size>50</size>
+            <default></default>
+            <conditions>
+              <condition>required</condition>
+              <condition>unique</condition>
+            </conditions>
+            <attribute>
+            </attribute>
+            <name>password</name>
+            <type>string</type>
+            <size>254</size>
+            <default></default>
+            <conditions>
+              <condition>required</condition>
+              <condition>hash</condition>
+            </conditions>
+          </attribute>
+          <attribute>
+            <name>created_at</name>
+            <type>date</type>
+            <size></size>
+            <default>now</default>
+            <conditions>
+              <condition>required</condition>
+            </conditions>
+          </attribute>
+          <attribute>
+            <name>edited_at</name>
+            <type>date</type>
+            <size></size>
+            <default></default>
+            <conditions>
+            </conditions>
+          </attribute>
+        </attributes>
+        <relations>
+          <provider>...</provider>
+        </relations>
+        <!-- Esta interface es definida por el driver -->
+        <!-- El mediador debe realizar una petición -->
+        <!-- El mediador debe recibir una respuesta -->
+        <!-- En el mediador se debe mapear la relación entre el proveedor y el almacen (tabla(s), cache, filesystem, etc.) -->
+        <mediator>...</mediator>
+      </provider>
+      <provider>...</provider>
+      <provider>...</provider>
+    </providers>
+    <!-- El driver debe ser un facade que se encargue recibir petición, responder, enviar la instancia del mediador, validar que se tenga acceso al almacen -->
+    <!-- El driver debe recibir y responder la petición del proveedor -->
+    <driver>
+      <request>...</request>
+      <response>...</response>
+      <mediator>..</mediator>
+    </driver>
+  </storage>
+</gemstone>

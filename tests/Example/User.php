@@ -2,9 +2,9 @@
 
 namespace Tests\Example;
 
-use Amber\Gemstone\Model\Model;
+use Amber\Gemstone\Contracts\ProviderContract;
 
-class User extends Model
+class UserProvider implements ProviderContract
 {
 	protected $name = 'users';
 
