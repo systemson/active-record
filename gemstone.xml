@@ -151,7 +151,7 @@
     <driver>
       <request>...</request>
       <response>...</response>
-      <mediator>..</mediator>
+      <mediator>...</mediator>
     </driver>
   </storage>
 </gemstone>
