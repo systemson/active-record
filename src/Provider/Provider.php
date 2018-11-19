@@ -49,19 +49,18 @@ class Provider implements AttributeAwareInterface
 		$attributes = $this->attributes->clone();
 
 		foreach ($array as $name => $value) {
-			if ($attributes->has($name)) {
-				$attributes->set($name, new Attribute($name, '', $value));
-			} else {
-				$attributes->set($name, new Attribute($name, '', $value));
+			if ($attributes->hasNot($name)) {
+				$attributes->set($name, new Attribute($name));
 			}
+			$attributes->setValue($name, $value);
 		}
 
-		return $attributes;
+		return $attributes->lock();
 	}
 
 	public function new()
 	{
-		return new Resource($this->name(), $this->attributes()->clone(), $this->id());
+		return new Resource($this->name(), $this->attributes()->clone()->lock(), $this->id());
 	}
 
 	public function find($id)

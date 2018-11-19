@@ -2,8 +2,6 @@
 
 namespace Amber\Gemstone\Common;
 
-use Amber\Collection\Collection;
-
 /**
  *
  */
@@ -11,8 +9,8 @@ trait AttributeAwareTrait
 {
 	private function initAttributeCollection()
 	{
-		if (!$this->attributes instanceof Collection) {
-			$this->attributes = new Collection();
+		if (!$this->attributes instanceof AttributeCollection) {
+			$this->attributes = new AttributeCollection();
 		}
 	}
 
