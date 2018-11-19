@@ -13,9 +13,6 @@ class Attribute
 	private $default;
 	private $rules;
 
-	private $current;
-	private $stored;
-
 	const TYPES = [
 		'string',
 		'int',
@@ -23,11 +20,10 @@ class Attribute
 		'date',
 	];
 
-	public function __construct(string $name, string $rules = null, $value = null)
+	public function __construct(string $name, string $rules = null)
 	{
 		$this->name = $name;
 		$this->rules($rules);
-		$this->stored = $value;
 	}
 
 	public function name()
@@ -71,31 +67,6 @@ class Attribute
 		return $this->rules = explode('|', $rules);
 	}
 
-	public function current($current = null)
-	{
-		if (is_null($current)) {
-			return $this->current;
-		}
-
-		$this->current = $current;
-		return $this;
-	}
-
-	public function stored($stored = null)
-	{
-		if (is_null($stored)) {
-			return $this->stored;
-		}
-
-		$this->stored = $stored;
-		return $this;
-	}
-
-	public function value()
-	{
-		return $this->current ?? $this->stored ?? $this->default();
-	}
-
 	public function isValid()
 	{
 		return $this->validate($this->value(), $this->rules);
@@ -119,10 +90,5 @@ class Attribute
 		$rule = explode('=', $this->findRule($name));
 
 		return $rule[1] ?? null;
-	}
-
-	public function clone()
-	{
-		return clone $this;
 	}
 }

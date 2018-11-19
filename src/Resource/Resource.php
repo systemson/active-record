@@ -29,14 +29,14 @@ class Resource implements AttributeAwareInterface
 	public function __set($key, $value)
 	{
 		if ($this->attributes->has($key)) {
-			$this->attributes->get($key)->current($value);
+			$this->attributes->setValue($key, $value);
 		}
 	}
 
 	public function __get($key)
 	{
 		if ($this->attributes->has($key)) {
-			return $this->attributes->get($key)->value();
+			return $this->attributes->getValue($key);
 		}
 
 		return null;

@@ -2,9 +2,11 @@
 
 namespace Amber\Gemstone;
 
+use Amber\Gemstone\Storage\Storage;
+
 /**
  *
  */
-class Gemstone
+class Gemstone extends Storage
 {
 }

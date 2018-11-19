@@ -24,11 +24,12 @@ class AttributeCollection extends Collection
 
 	public function getValue($key)
 	{
-		if ($this->locked) {
-			$this->values['current'][$key];
-		} else {
-			$this->values['stored'][$key];
-		}
+		return $this->values['current'][$key] ?? $this->values['stored'][$key] ?? $this->get($key)->default();
+	}
+
+	public function attribute($name)
+	{
+		return $this->get($name);
 	}
 
 	public function lock()
