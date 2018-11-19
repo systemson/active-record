@@ -59,7 +59,7 @@ class Provider implements AttributeAwareInterface
 		return $attributes;
 	}
 
-	public function blank()
+	public function new()
 	{
 		return new Resource($this->name(), $this->attributes()->clone(), $this->id());
 	}

@@ -13,7 +13,7 @@ class GemstoneTest extends TestCase
 	{
 		$provider = new Provider(new MediatorMock());
 
-		$new = $provider->blank();
+		$new = $provider->new();
 
 		$this->assertEquals('default', $new->username);
 
