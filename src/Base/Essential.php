@@ -8,7 +8,7 @@ use Amber\Gemstone\Config\ConfigAwareTrait;
 /**
  *
  */
-class Essential Implements ConfigAwareInterface
+class Essential implements ConfigAwareInterface
 {
     use ConfigAwareTrait;
 }

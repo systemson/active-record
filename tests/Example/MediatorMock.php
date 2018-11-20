@@ -9,8 +9,9 @@ class MediatorMock
 	public function first($id)
 	{
 		return [
-			'username' => 'mocked',
-			'password' => 'secret',
+			'username' => 'mocked_name',
+			'password' => 'mocked_pass',
+			'status' => true,
 			'created_at' => '2018-11-17',
 			'edited_at' => null,
 		];

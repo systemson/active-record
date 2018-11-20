@@ -9,20 +9,28 @@ use PHPUnit\Framework\TestCase;
 
 class GemstoneTest extends TestCase
 {
-	public function testProvider()
-	{
-		$provider = new Provider(new MediatorMock());
+    public function testProvider()
+    {
+        $provider = new Provider(new MediatorMock());
 
-		$new = $provider->new();
+        $new = $provider->new();
 
-		$this->assertEquals('default', $new->username);
+        //$this->assertFalse($new->isValid());
 
-		$new->username = 'username';
+        //$this->assertEquals('default', $new->username);
 
-		$this->assertEquals('username', $new->username);
+        //$new->username = 'username';
+        //$new->password = 'secret';
 
-		$resource = $provider->find(1);
+        $this->assertTrue($new->isValid());
 
-		$this->assertEquals('mocked', $resource->username);
-	}
+        //$this->assertEquals('username', $new->username);
+        //$this->assertEquals('secret', $new->password);
+
+        //$resource = $provider->find(1);
+
+        //$this->assertEquals('mocked_name', $resource->username);
+        //$this->assertEquals('mocked_pass', $resource->password);
+        //$this->assertEquals(true, $resource->status);
+    }
 }
