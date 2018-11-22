@@ -15,22 +15,22 @@ class GemstoneTest extends TestCase
 
         $new = $provider->new();
 
-        //$this->assertFalse($new->isValid());
+        $this->assertFalse($new->isValid());
 
-        //$this->assertEquals('default', $new->username);
+        $this->assertEquals('default', $new->username);
 
-        //$new->username = 'username';
-        //$new->password = 'secret';
+        $new->username = 'username';
+        $new->password = 'secret';
 
         $this->assertTrue($new->isValid());
 
-        //$this->assertEquals('username', $new->username);
-        //$this->assertEquals('secret', $new->password);
+        $this->assertEquals('username', $new->username);
+        $this->assertEquals('secret', $new->password);
 
-        //$resource = $provider->find(1);
+        $resource = $provider->find(1);
 
-        //$this->assertEquals('mocked_name', $resource->username);
-        //$this->assertEquals('mocked_pass', $resource->password);
-        //$this->assertEquals(true, $resource->status);
+        $this->assertEquals('mocked_name', $resource->username);
+        $this->assertEquals('mocked_pass', $resource->password);
+        $this->assertEquals(true, $resource->status);
     }
 }

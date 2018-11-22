@@ -49,12 +49,14 @@ class Resource implements AttributeAwareInterface
             $result = Validator::validate($this->{$key}, $this->attributes->getRules($key));
             
             if ($result !== true) {
-                //$value = var_export($this->{$key}, true);
+                $value = var_export($this->{$key}, true);
                 
-                //throw new \Exception("Value [{$value}] for attribute ['{$key}'] failed validating rule ['{$result}'].");
+                /*throw new \Exception(
+                    "Faild validating attribute ['{$key}'] for rule ['{$result}'] with value [{$value}].");*/
                 return false;
             }
         }
+
         return $result;
     }
 }

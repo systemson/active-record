@@ -17,10 +17,10 @@ class Provider implements AttributeAwareInterface
     private $name = 'users';
 
     protected $attributes = [
-        'username' => 'string|unique|max=50|not_null|default=default',
+        'username' => 'string|unique|default=default|max=50|not_null',
         'password' => 'string|max=254|not_null',
-        'status' => 'boolean|default=true|not_null',
-        'created_at' => 'date=Y-m-d|default=now|not_null',
+        'status' => 'boolean|default=1|not_null',
+        'created_at' => 'date=Y-m-d|default=2018-11-21|not_null',
         'edited_at' => 'date=Y-m-d',
     ];
 

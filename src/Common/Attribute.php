@@ -15,8 +15,8 @@ class Attribute
 
     const TYPES = [
         'string',
-        'int',
-        'bool',
+        'integer',
+        'boolean',
         'date',
     ];
 
@@ -67,16 +67,21 @@ class Attribute
         return $this->rules = explode('|', $rules);
     }
 
-    private function findRule(...$name)
+    private function findRule($name)
     {
-        $result = array_uintersect($this->rules(), $name, function ($a, $b) {
-            if (strpos($a, $b) !== false) {
-                return false;
-            }
-            return true;
+        $result = array_filter($this->rules(), function ($rule) use ($name) {
+            return strpos($rule, $name) !== false;
         });
 
         $rule = array_values($result);
+
+        return $rule[0] ?? null;
+    }
+
+    private function getName($name)
+    {
+        $rule = explode('=', $this->findRule($name));
+
         return $rule[0] ?? null;
     }
 
