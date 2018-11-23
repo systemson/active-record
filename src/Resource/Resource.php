@@ -5,6 +5,7 @@ namespace Amber\Gemstone\Resource;
 use Amber\Gemstone\Common\AttributeAwareTrait;
 use Amber\Gemstone\Common\AttributeAwareInterface;
 use Amber\Gemstone\Common\Validator;
+use Amber\Gemstone\Common\AttributeCollection;
 
 /**
  *
@@ -18,7 +19,7 @@ class Resource implements AttributeAwareInterface
     private $id;
     private $relations;
 
-    public function __construct(string $name, iterable $attributes, $id)
+    public function __construct(string $name, AttributeCollection $attributes, $id)
     {
         $this->name = $name;
 

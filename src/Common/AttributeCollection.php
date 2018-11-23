@@ -7,7 +7,7 @@ use Amber\Collection\Collection;
 /**
  *
  */
-class AttributeCollection extends Collection
+class AttributeCollection extends Collection implements AttributeCollectionInterface
 {
 
     private $values;
@@ -27,17 +27,12 @@ class AttributeCollection extends Collection
         return $this->values['current'][$key] ?? $this->values['stored'][$key] ?? $this->get($key)->default();
     }
 
-    public function getRules($key)
+    public function getRules($key): iterable
     {
         return $this->get($key)->rules();
     }
 
-    public function attribute($name)
-    {
-        return $this->get($name);
-    }
-
-    public function lock()
+    public function lock(): AttributeCollectionInterface
     {
         $this->locked = true;
         return $this;
