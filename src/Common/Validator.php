@@ -22,7 +22,7 @@ class Validator extends AbstractSingleton
     ];
 
     /**
-     * @var array The method(s) that should be publicly exposed.
+     * @var array The protected method(s) that should be statically exposed.
      */
     protected static $passthru = [
         'validate',

@@ -13,10 +13,10 @@ use Amber\Gemstone\Common\AttributeCollection;
  */
 class Provider implements AttributeAwareInterface
 {
-    use AttributeAwareTrait;
+    use AttributeAwareTrait, DataHandlerTrait;
 
-    private $name = 'users';
-
+    private $id = 'id';
+    protected $name = 'users';
     protected $attributes = [
         'username' => 'string|unique|default=default|max=50|not_null',
         'password' => 'string|max=254|not_null',
@@ -25,7 +25,6 @@ class Provider implements AttributeAwareInterface
         'edited_at' => 'date=Y-m-d',
     ];
 
-    private $id = 'id';
     private $relations;
     private $mediator;
 
@@ -64,20 +63,6 @@ class Provider implements AttributeAwareInterface
         }
 
         return $attributes->lock();
-    }
-
-    public function new(): Resource
-    {
-        return new Resource($this->name(), $this->attributes()->clone()->lock(), $this->id());
-    }
-
-    public function find($id): Resource
-    {
-        $item = $this->mediator->first([$this->id()->name, $id]);
-
-        $attributes = $this->updatedAttributes($item);
-
-        return new Resource($this->name(), $attributes, $this->id($id));
     }
 
     public function name(): string

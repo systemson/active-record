@@ -74,6 +74,17 @@ class Attribute
         }
 
         $result = array_filter($this->rules(), function ($rule) use ($name) {
+            if (is_array($name)) {
+                foreach ($name as $name) {
+                    $return = strpos($rule, $name) !== false;
+                    if ($return) {
+                        return $return;
+                    }
+                }
+
+                return false;
+            }
+
             return strpos($rule, $name) !== false;
         });
 
