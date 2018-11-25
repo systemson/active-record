@@ -31,6 +31,8 @@ class GemstoneTest extends TestCase
 
         $this->assertEquals('mocked_name', $resource->username);
         $this->assertEquals('mocked_pass', $resource->password);
+        $this->assertEquals('nothing', $resource->no_rules_column);
+        $this->assertNull($resource->other);
         $this->assertEquals(true, $resource->status);
     }
 }

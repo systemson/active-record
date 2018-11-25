@@ -13,6 +13,7 @@ class MediatorMock
 			'password' => 'mocked_pass',
 			'status' => true,
 			'created_at' => '2018-11-17',
+			'no_rules_column' => 'nothing',
 			'edited_at' => null,
 		];
 		

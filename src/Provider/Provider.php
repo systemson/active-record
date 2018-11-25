@@ -6,6 +6,7 @@ use Amber\Gemstone\Common\Attribute;
 use Amber\Gemstone\Common\AttributeAwareTrait;
 use Amber\Gemstone\Common\AttributeAwareInterface;
 use Amber\Gemstone\Resource\Resource;
+use Amber\Gemstone\Common\AttributeCollection;
 
 /**
  *
@@ -42,6 +43,10 @@ class Provider implements AttributeAwareInterface
 
     private function initAttributes(): void
     {
+        if (empty($this->attributes)) {
+            $this->initAttributeCollection();
+        }
+
         foreach ($this->attributes as $name => $rules) {
             $this->setAttribute(new Attribute($name, $rules));
         }

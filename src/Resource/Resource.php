@@ -46,16 +46,31 @@ class Resource implements AttributeAwareInterface
 
     public function isValid()
     {
+        if (empty($this->attributes)) {
+            return true;
+        }
+
         foreach ($this->attributes as $key => $not_used) {
             $result = Validator::validate($this->{$key}, $this->attributes->getRules($key));
             
             if ($result !== true) {
-                $value = var_export($this->{$key}, true);
+                //$value = var_export($this->{$key}, true);
                 
                 /*throw new \Exception(
                     "Faild validating attribute ['{$key}'] for rule ['{$result}'] with value [{$value}].");*/
                 return false;
             }
+        }
+
+        return $result;
+    }
+
+    public function toArray(): array
+    {
+        $return = [];
+
+        foreach ($this->attributes as $name => $attribute) {
+            $result[$name] =  $this->attributes->getValue($name);
         }
 
         return $result;

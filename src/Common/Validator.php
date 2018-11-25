@@ -3,16 +3,15 @@
 namespace Amber\Gemstone\Common;
 
 use Amber\Phraser\Phraser;
+use Amber\Utils\Implementations\AbstractSingleton;
 use Amber\Utils\Traits\SingletonTrait;
 use Carbon\Carbon;
 
 /**
  *
  */
-class Validator
+class Validator extends AbstractSingleton
 {
-    use SingletonTrait;
-
     private $validations = [
         'string',
         'integer',
@@ -22,7 +21,20 @@ class Validator
         'not_null',
     ];
 
-    private function validate($value, iterable $rules)
+    /**
+     * @var array The method(s) that should be publicly exposed.
+     */
+    protected static $passthru = [
+        'validate',
+        'validateString',
+        'validateInteger',
+        'validateBoolean',
+        'validateDate',
+        'validateMax',
+        'validateNotNull',
+    ];
+
+    protected function validate($value, iterable $rules)
     {
         $nullable = !in_array('not_null', $rules);
 
@@ -87,17 +99,17 @@ class Validator
 
     /* Type validations */
 
-    private function validateString($value)
+    protected function validateString($value)
     {
         return is_string($value) && $value !== '';
     }
 
-    private function validateInteger($value)
+    protected function validateInteger($value)
     {
         return is_int($value);
     }
 
-    private function validateBoolean($value)
+    protected function validateBoolean($value)
     {
         if (is_bool($value) || in_array(strtolower($value), ['false', 'true', '1', '0', 1, 0], true)) {
             return true;
@@ -106,21 +118,21 @@ class Validator
         return false;
     }
 
-    private function validateDate($value, $format)
+    protected function validateDate($value, $format)
     {
         $date = Carbon::createFromFormat($format, $value);
-        return $date && $date->format($format) == $value;
+        return $date && $date->format($format) === $value;
     }
 
 
     /* Rule validations */
 
-    private function validateMax($value, $max)
+    protected function validateMax($value, $max)
     {
         return strlen($value) <= $max;
     }
 
-    private function validateNotNull($value)
+    protected function validateNotNull($value)
     {
         return !is_null($value);
     }

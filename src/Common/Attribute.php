@@ -69,6 +69,10 @@ class Attribute
 
     private function findRule($name)
     {
+        if (empty($this->rules())) {
+            return null;
+        }
+
         $result = array_filter($this->rules(), function ($rule) use ($name) {
             return strpos($rule, $name) !== false;
         });

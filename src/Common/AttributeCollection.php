@@ -15,6 +15,10 @@ class AttributeCollection extends Collection implements AttributeCollectionInter
 
     public function setValue($key, $value)
     {
+        if ($this->hasNot($key)) {
+            $this->set($key, new Attribute($key));
+        }
+
         if ($this->locked) {
             $this->values['current'][$key] = $value;
         } else {
