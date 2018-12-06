@@ -9,7 +9,6 @@ use Amber\Collection\Collection;
  */
 class AttributeCollection extends Collection implements AttributeCollectionInterface
 {
-
     private $values;
     private $locked;
 
