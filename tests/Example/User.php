@@ -6,7 +6,6 @@ use Amber\Gemstone\Contracts\ProviderContract;
 
 class UserProvider implements ProviderContract
 {
-
     protected $name = 'users';
 
     protected $attributes = [
