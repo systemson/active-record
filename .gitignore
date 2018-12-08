@@ -1,4 +1,5 @@
 composer.phar
+phpDocumentor.phar
 /vendor/
 /tmp/
 composer.lock
